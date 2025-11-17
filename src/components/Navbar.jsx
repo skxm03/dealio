@@ -14,7 +14,7 @@ const Navbar = ({ user, onLogout }) => {
 			<div className='max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8'>
 				<div className='flex items-center justify-between h-16'>
 					{/* Logo */}
-					<div className='flex-shrink-0'>
+					<div className='shrink-0'>
 						<h1 className='text-2xl font-bold text-blue-600'>
 							Dealio
 						</h1>
