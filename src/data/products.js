@@ -1,4 +1,3 @@
-// Mock product data for the marketplace
 export const products = [
 	{
 		id: 1,
@@ -110,7 +109,6 @@ export const products = [
 	},
 ];
 
-// Filter options
 export const categories = ['All', 'Electronics', 'Fashion', 'Home', 'Sports'];
 export const priceRanges = [
 	{ label: 'All Prices', min: 0, max: Infinity },

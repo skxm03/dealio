@@ -3,20 +3,14 @@ import Navbar from '../components/Navbar';
 import { products } from '../data/products';
 
 const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
+	const product = products.find((p) => p.id === productId) || products[0];
+
 	const [selectedImage, setSelectedImage] = useState(0);
 	const [quantity, setQuantity] = useState(1);
 
-	const productData = products.find((p) => p.id === productId) || products[0];
-	const images = [productData.image, productData.image, productData.image];
+	const images = [product.image, product.image, product.image];
 
-	const product = {
-		...productData,
-		images,
-		reviews: 156,
-		condition: 'New',
-		availability: 'In Stock',
-		shipping: 'Free Shipping',
-	};
+	const stars = Array.from({ length: 5 });
 
 	return (
 		<div className='min-h-screen bg-gray-50'>
@@ -28,7 +22,7 @@ const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
 			<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
 				<button
 					onClick={onBackToHome}
-					className='flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors'>
+					className='flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4'>
 					<svg
 						className='w-5 h-5'
 						fill='none'
@@ -46,30 +40,27 @@ const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-12'>
 					<div className='space-y-4'>
-						<div className='bg-white rounded-lg overflow-hidden shadow-sm border border-gray-200'>
+						<div className='bg-white rounded-lg overflow-hidden shadow-sm border'>
 							<img
-								src={product.images[selectedImage]}
+								src={images[selectedImage]}
 								alt={product.title}
 								className='w-full h-96 object-cover'
-								loading='lazy'
 							/>
 						</div>
 
 						<div className='grid grid-cols-3 gap-4'>
-							{product.images.map((img, index) => (
+							{images.map((img, index) => (
 								<button
 									key={index}
 									onClick={() => setSelectedImage(index)}
-									className={`bg-white rounded-lg overflow-hidden border-2 transition ${
+									className={`rounded-lg overflow-hidden border-2 ${
 										selectedImage === index
-											? 'border-blue-600 shadow-sm'
+											? 'border-blue-600'
 											: 'border-gray-200 hover:border-gray-300'
 									}`}>
 									<img
 										src={img}
-										alt={`${product.title}-${index}`}
 										className='w-full h-24 object-cover'
-										loading='lazy'
 									/>
 								</button>
 							))}
@@ -78,101 +69,69 @@ const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
 
 					<div className='space-y-6'>
 						<div>
-							<h1 className='text-3xl font-bold text-gray-900 mb-2'>
+							<h1 className='text-3xl font-bold text-gray-900'>
 								{product.title}
 							</h1>
-
-							<div className='flex items-center gap-3'>
-								<div className='flex items-center gap-1'>
-									{[...Array(5)].map((_, index) => (
+							<div className='flex items-center gap-3 mt-1'>
+								<div className='flex'>
+									{stars.map((_, i) => (
 										<svg
-											key={index}
+											key={i}
 											className={`w-5 h-5 ${
-												index <
-												Math.floor(product.rating)
-													? 'text-yellow-400 fill-current'
-													: 'text-gray-300 fill-current'
+												i < Math.floor(product.rating)
+													? 'text-yellow-400'
+													: 'text-gray-300'
 											}`}
+											fill='currentColor'
 											viewBox='0 0 20 20'>
 											<path d='M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z' />
 										</svg>
 									))}
-									<span className='ml-2 text-lg font-semibold text-gray-900'>
-										{product.rating}
-									</span>
 								</div>
-								<span className='text-gray-500'>
-									({product.reviews} reviews)
+								<span className='text-gray-600 text-sm'>
+									(156 reviews)
 								</span>
 							</div>
 						</div>
 
 						<div className='bg-blue-50 rounded-lg p-6 border border-blue-100'>
-							<div className='flex items-baseline gap-2'>
-								<span className='text-4xl font-bold text-blue-600'>
-									${product.price.toFixed(2)}
-								</span>
-								<span className='text-gray-500 line-through text-lg'>
-									${(product.price * 1.2).toFixed(2)}
-								</span>
-							</div>
-							<p className='text-green-600 font-medium mt-1'>
-								Save ${(product.price * 0.2).toFixed(2)} (20%
-								off)
+							<span className='text-4xl font-bold text-blue-600'>
+								${product.price.toFixed(2)}
+							</span>
+							<span className='ml-2 line-through text-gray-500 text-lg'>
+								${(product.price * 1.2).toFixed(2)}
+							</span>
+							<p className='text-green-600 mt-1'>
+								Save ${(product.price * 0.2).toFixed(2)}
 							</p>
 						</div>
 
-						<div className='flex items-center gap-3 p-4 bg-gray-50 rounded-lg border border-gray-200'>
+						<div className='flex items-center gap-3 p-4 bg-gray-50 rounded-lg border'>
 							<div className='w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center'>
 								<span className='text-blue-600 font-bold text-lg'>
 									{product.seller[0]}
 								</span>
 							</div>
-
 							<div>
 								<p className='text-sm text-gray-500'>Sold by</p>
 								<p className='font-semibold text-gray-900'>
 									{product.seller}
 								</p>
 							</div>
-
-							<button className='ml-auto px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-sm font-medium'>
-								View Store
-							</button>
 						</div>
 
-						<div className='grid grid-cols-2 gap-4'>
-							<div className='p-4 bg-white rounded-lg border border-gray-200'>
-								<p className='text-sm text-gray-500 mb-1'>
-									Condition
-								</p>
-								<p className='font-semibold text-gray-900'>
-									{product.condition}
-								</p>
-							</div>
-							<div className='p-4 bg-white rounded-lg border border-gray-200'>
-								<p className='text-sm text-gray-500 mb-1'>
-									Availability
-								</p>
-								<p className='font-semibold text-green-600'>
-									{product.availability}
-								</p>
-							</div>
-						</div>
-
-						<div className='space-y-2'>
+						<div>
 							<label className='text-sm font-medium text-gray-700'>
 								Quantity
 							</label>
-							<div className='flex items-center gap-3'>
+							<div className='flex items-center gap-3 mt-2'>
 								<button
 									onClick={() =>
 										setQuantity(Math.max(1, quantity - 1))
 									}
-									className='w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-semibold transition'>
-									−
+									className='w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg'>
+									–
 								</button>
-
 								<input
 									type='number'
 									value={quantity}
@@ -180,31 +139,28 @@ const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
 										setQuantity(
 											Math.max(
 												1,
-												parseInt(e.target.value) || 1
+												Number(e.target.value) || 1
 											)
 										)
 									}
-									className='w-20 h-10 text-center border border-gray-300 rounded-lg font-semibold'
+									className='w-20 h-10 text-center border rounded-lg'
 								/>
-
 								<button
 									onClick={() => setQuantity(quantity + 1)}
-									className='w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 font-semibold transition'>
+									className='w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg'>
 									+
 								</button>
 							</div>
 						</div>
 
-						<div className='space-y-3 pt-4'>
-							<button className='w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-lg transition-colors text-lg shadow-sm'>
+						<div className='space-y-3'>
+							<button className='w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700'>
 								Add to Cart
 							</button>
-
-							<button className='w-full bg-gray-900 hover:bg-gray-800 text-white font-semibold py-4 rounded-lg transition-colors text-lg shadow-sm'>
+							<button className='w-full bg-gray-900 text-white py-4 rounded-lg hover:bg-gray-800'>
 								Buy Now
 							</button>
-
-							<button className='w-full border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-4 rounded-lg transition flex items-center justify-center gap-2'>
+							<button className='w-full border-2 border-gray-300 py-4 rounded-lg hover:border-gray-400 flex gap-2 justify-center'>
 								<svg
 									className='w-6 h-6'
 									fill='none'
@@ -222,25 +178,11 @@ const ProductDetail = ({ user, onLogout, productId = 1, onBackToHome }) => {
 						</div>
 
 						<div className='bg-green-50 border border-green-200 rounded-lg p-4'>
-							<div className='flex items-center gap-2'>
-								<svg
-									className='w-5 h-5 text-green-600'
-									fill='none'
-									stroke='currentColor'
-									viewBox='0 0 24 24'>
-									<path
-										strokeLinecap='round'
-										strokeLinejoin='round'
-										strokeWidth={2}
-										d='M5 13l4 4L19 7'
-									/>
-								</svg>
-								<span className='font-semibold text-green-800'>
-									{product.shipping}
-								</span>
-							</div>
-							<p className='text-sm text-green-700 mt-1 ml-7'>
-								Estimated delivery: 3-5 business days
+							<p className='font-semibold text-green-800'>
+								Free Shipping
+							</p>
+							<p className='text-sm text-green-700 mt-1'>
+								Estimated delivery: 3–5 business days
 							</p>
 						</div>
 					</div>
