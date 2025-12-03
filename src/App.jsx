@@ -1,3 +1,4 @@
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useState } from 'react';
 import Login from './pages/Login';
 import Home from './pages/Home';
@@ -5,54 +6,69 @@ import ProductDetail from './pages/ProductDetail';
 
 function App() {
 	const [user, setUser] = useState(null);
-	const [currentPage, setCurrentPage] = useState('home'); // 'home' or 'product'
-	const [selectedProductId, setSelectedProductId] = useState(null);
 
 	const handleLogin = (userData) => {
 		setUser(userData);
-		console.log('User logged in:', userData);
 	};
 
 	const handleLogout = () => {
 		setUser(null);
-		setCurrentPage('home');
-		console.log('User logged out');
 	};
 
-	const handleProductClick = (productId) => {
-		setSelectedProductId(productId);
-		setCurrentPage('product');
-	};
-
-	const handleBackToHome = () => {
-		setCurrentPage('home');
-		setSelectedProductId(null);
-	};
-
-	// If user is not logged in, show login page
-	if (!user) {
-		return <Login onLogin={handleLogin} />;
-	}
-
-	// If viewing product detail
-	if (currentPage === 'product' && selectedProductId) {
-		return (
-			<ProductDetail
-				user={user}
-				onLogout={handleLogout}
-				productId={selectedProductId}
-				onBackToHome={handleBackToHome}
+	// Protected routes wrapper
+	const ProtectedRoute = ({ children }) => {
+		return user ? (
+			children
+		) : (
+			<Navigate
+				to='/login'
+				replace
 			/>
 		);
-	}
+	};
 
-	// If user is logged in, show home page with products
 	return (
-		<Home
-			user={user}
-			onLogout={handleLogout}
-			onProductClick={handleProductClick}
-		/>
+		<Routes>
+			<Route
+				path='/login'
+				element={<Login onLogin={handleLogin} />}
+			/>
+
+			<Route
+				path='/'
+				element={
+					<ProtectedRoute>
+						<Home
+							user={user}
+							onLogout={handleLogout}
+						/>
+					</ProtectedRoute>
+				}
+			/>
+
+			<Route
+				path='/product/:id'
+				element={
+					<ProtectedRoute>
+						<ProductDetail
+							user={user}
+							onLogout={handleLogout}
+						/>
+					</ProtectedRoute>
+				}
+			/>
+
+			{/* Redirect unknown routes */}
+			<Route
+				path='*'
+				element={
+					<Navigate
+						to='/'
+						replace
+					/>
+				}
+			/>
+		</Routes>
 	);
 }
 

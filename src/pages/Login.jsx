@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { validateLogin } from '../data/users';
 
 function Login({ onLogin }) {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+	const navigate = useNavigate();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -18,6 +20,7 @@ function Login({ onLogin }) {
 
 		if (result.success) {
 			onLogin(result.user);
+			navigate('/'); // 👈 NEW redirect
 		} else {
 			setError(result.message);
 		}
