@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateLogin } from '../data/users';
 
 function Login({ onLogin }) {
 	const [email, setEmail] = useState('');
@@ -11,18 +10,11 @@ function Login({ onLogin }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		if (!email || !password) {
-			setError('Please enter email and password');
-			return;
-		}
-
-		const result = validateLogin(email, password);
-
-		if (result.success) {
-			onLogin(result.user);
-			navigate('/'); // 👈 NEW redirect
+		if (email === 'john@example.com' && password === 'password123') {
+			onLogin({ name: 'John Doe', email });
+			navigate('/');
 		} else {
-			setError(result.message);
+			setError('Invalid email or password');
 		}
 	};
 
@@ -87,10 +79,6 @@ function Login({ onLogin }) {
 							<strong>Password:</strong> password123
 						</p>
 					</div>
-				</div>
-
-				<div className='text-center mt-6 text-gray-500 text-xs'>
-					© 2024 Dealio • Terms & Privacy Policy
 				</div>
 			</div>
 		</div>

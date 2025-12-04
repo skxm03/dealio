@@ -8,8 +8,8 @@ const Sidebar = () => {
 	);
 
 	return (
-		<aside className='w-64 bg-white border-r border-gray-200 p-6 h-[calc(100vh-64px)] sticky top-16 overflow-y-auto hidden lg:block'>
-			<div className='mb-6 pb-4 border-b border-gray-200'>
+		<aside className='hidden lg:block w-64 bg-white border-r border-gray-200 p-6 h-[calc(100vh-64px)] sticky top-16 overflow-y-auto'>
+			<div className='mb-6 pb-4 border-gray-200'>
 				<h2 className='text-lg font-bold text-gray-900'>Filters</h2>
 			</div>
 
