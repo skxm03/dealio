@@ -19,24 +19,13 @@ function App() {
 	};
 
 	const addToCart = (product) => {
-		setCart([...cart, product]); // 👈 super simple add
+		setCart([...cart, product]);
 	};
 
 	const removeFromCart = (index) => {
-		const newCart = [...cart];
-		newCart.splice(index, 1); // 👈 remove by index
-		setCart(newCart);
-	};
-
-	const Protected = ({ children }) => {
-		if (!user)
-			return (
-				<Navigate
-					to='/login'
-					replace
-				/>
-			);
-		return children;
+		const updatedCart = [...cart];
+		updatedCart.splice(index, 1);
+		setCart(updatedCart);
 	};
 
 	return (
@@ -49,50 +38,34 @@ function App() {
 			<Route
 				path='/'
 				element={
-					<Protected>
-						<Home
-							user={user}
-							onLogout={handleLogout}
-							cart={cart}
-						/>
-					</Protected>
+					<Home
+						user={user}
+						onLogout={handleLogout}
+						cart={cart}
+					/>
 				}
 			/>
 
 			<Route
 				path='/product/:id'
 				element={
-					<Protected>
-						<ProductDetail
-							user={user}
-							onLogout={handleLogout}
-							addToCart={addToCart}
-							cart={cart}
-						/>
-					</Protected>
+					<ProductDetail
+						user={user}
+						onLogout={handleLogout}
+						addToCart={addToCart}
+						cart={cart}
+					/>
 				}
 			/>
 
 			<Route
 				path='/cart'
 				element={
-					<Protected>
-						<Cart
-							user={user}
-							onLogout={handleLogout}
-							cart={cart}
-							removeFromCart={removeFromCart}
-						/>
-					</Protected>
-				}
-			/>
-
-			<Route
-				path='*'
-				element={
-					<Navigate
-						to='/'
-						replace
+					<Cart
+						user={user}
+						onLogout={handleLogout}
+						cart={cart}
+						removeFromCart={removeFromCart}
 					/>
 				}
 			/>

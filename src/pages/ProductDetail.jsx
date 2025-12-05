@@ -5,7 +5,8 @@ import { products } from '../data/products';
 const ProductDetail = ({ user, onLogout, addToCart, cart }) => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const product = products.find((p) => p.id === Number(id));
+
+	const product = products[id - 1]; // 👈 simplified
 
 	if (!product) return <p className='p-8 text-center'>Product Not Found</p>;
 
@@ -46,6 +47,7 @@ const ProductDetail = ({ user, onLogout, addToCart, cart }) => {
 								className='w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition'>
 								Add to Cart
 							</button>
+
 							<button className='w-full bg-gray-900 text-white py-4 rounded-lg hover:bg-gray-800 transition'>
 								Buy Now
 							</button>
